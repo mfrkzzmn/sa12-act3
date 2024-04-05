@@ -62,13 +62,52 @@ def task_2
   result = convert_currency(source, destination, amount).round(2)
 
   puts "#{amount} #{source} to #{destination} is #{result} "
+end
 
+def get_event_data(country)
+  api_key = "bkKef0klSGXebpNv2paHhWksOAWrwPQS"
+  event_api ="https://app.ticketmaster.com/discovery/v2/events.json?countryCode=#{country}&apikey=#{api_key}"
+  result = HTTParty.get(event_api, format: :json)
+  # puts result["_embedded"]["events"][0]["name"]
+  # exchange_rate = results["conversion_rates"][destination]
 
+  return result
+end
+
+def task_3
+  country = "US"
+  result = get_event_data(country)
+
+  # puts "#{amount} #{source} to #{destination} is #{result} "
+  events = result["_embedded"]["events"]
+  # puts events[0]
+
+  events.each do |event|
+    puts "event name: #{event["_embedded"]["venues"][0]["name"]}"
+    puts "event venue: #{event["_embedded"]["venues"][0]["address"]["line1"]}, #{event["_embedded"]["venues"][0]["city"]["name"]}, #{event["_embedded"]["venues"][0]["state"]["name"]}, #{event["_embedded"]["venues"][0]["postalCode"]}, #{event["_embedded"]["venues"][0]["country"]["name"]},"
+    puts "event date: #{event["dates"]["start"]["localDate"]}"
+    puts "event time: #{event["dates"]["start"]["localTime"]}"
+    puts
+
+    # puts "event name: #{event["_links"]["_embedded"]}"
+    # puts "event name: #{event["name"]}"
+    # puts "event name: #{event["name"]}"
+    # puts "event name: #{event["name"]}"
+  end
 end
 
 
+puts "-----task 1 start------"
+puts
 task_1
+puts
+puts "-----task 1 end------"
+puts "-----task 2 start------"
 puts
 task_2
 puts
+puts "-----task 2 end------"
+puts "-----task 3 start------"
+puts
 task_3
+puts "-----task  end------"
